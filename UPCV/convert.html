@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingress GDPR Data Converter</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        var jsonStr = "";
+
+        function alertText(text) {
+            $("#alert").append("<p>" + text + "</p>");
+        }
+
+        function upload() {
+            $("#copy-button").prop('disabled', true);
+            var selectedFile = document.getElementById("files").files[0];
+            var name = selectedFile.name;
+            var size = selectedFile.size;
+
+            alertText("文件名:" + name + "大小：" + size);
+
+            var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
+            reader.readAsText(selectedFile);//读取文件的内容
+
+            reader.onload = function () {
+                console.log("Converting...");
+                var triggers = new Set([
+                    "captured portal", "created link",
+                    "hacked enemy portal", "hacked friendly portal", "hacked neutral portal",
+                    "resonator deployed", "resonator upgraded", "mod deployed"]);
+                var lines = this.result.split(/\r\n|\n/);
+
+                var upc = new Set();
+                var upv = new Set();
+
+                for (var i = 1; i < lines.length; i++) {
+                    var row = lines[i].split('\t');
+                    if (triggers.has(row[3])) {
+                        upv.add(row[1] + "," + row[2]);
+                    }
+                    if (row[3] === "captured portal") {
+                        upc.add(row[1] + "," + row[2]);
+                    }
+                }
+
+                jsonObject = [];
+                upv.forEach(function (value) {
+                    var upced = upc.has(value);
+                    var latlng = value.split(",");
+                    var lat = parseFloat(latlng[0]);
+                    var lng = parseFloat(latlng[1]);
+                    jsonObject.push({"latE6": Math.floor(lat * 1E6), "lngE6": Math.floor(lng * 1E6), "upc": upced})
+                });
+                // $("#result").text();
+                jsonStr = JSON.stringify(jsonObject);
+                alertText("转换完成，请拷贝至剪贴板");
+                $("#copy-button").prop('disabled', false);
+            };
+        }
+
+        function copyResult() {
+            if (jsonStr === "") {
+                alertText("请选择文件");
+                return;
+            }
+            navigator.clipboard.writeText(jsonStr).then(function () {
+                alertText("已拷贝至剪贴板");
+            }, function (err) {
+                alertText("拷贝错误：" + err);
+            });
+        }
+    </script>
+</head>
+<body>
+<div>
+    <input type="file" id="files" onchange="upload();"/>
+</div>
+<div>
+    <button id="copy-button" onclick="copyResult()" disabled>拷贝</button>
+</div>
+<div id="alert">
+</div>
+</body>
+</html>
