@@ -5,6 +5,16 @@
     <title>Ingress GDPR Data Converter</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
+        window.onload = function (ev) {
+            if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+                console.log("here");
+                $("#result").html("<textarea id='text'></textarea>")
+            } else {
+                console.log("here1");
+                $("#result").html("<pre id='text'></pre>")
+            }
+        };
+
         var jsonStr = "";
 
         function alertText(text) {
@@ -81,8 +91,7 @@
 <!--</div>-->
 <div id="alert">
 </div>
-<div>
-    <pre id="text"></pre>
+<div id="result">
 </div>
 </body>
 </html>
