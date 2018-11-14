@@ -51,34 +51,38 @@
                     var lng = parseFloat(latlng[1]);
                     jsonObject.push({"latE6": Math.floor(lat * 1E6), "lngE6": Math.floor(lng * 1E6), "upc": upced})
                 });
-                // $("#result").text();
                 jsonStr = JSON.stringify(jsonObject);
+                console.log("Converted");
+                $("#text").text(jsonStr);
                 alertText("转换完成，请拷贝至剪贴板");
-                $("#copy-button").prop('disabled', false);
+                // $("#copy-button").prop('disabled', false);
             };
         }
 
-        function copyResult() {
-            if (jsonStr === "") {
-                alertText("请选择文件");
-                return;
-            }
-            navigator.clipboard.writeText(jsonStr).then(function () {
-                alertText("已拷贝至剪贴板");
-            }, function (err) {
-                alertText("拷贝错误：" + err);
-            });
-        }
+        // function copyResult() {
+        //     if (jsonStr === "") {
+        //         alertText("请选择文件");
+        //         return;
+        //     }
+        //     navigator.clipboard.writeText(jsonStr).then(function () {
+        //         alertText("已拷贝至剪贴板");
+        //     }, function (err) {
+        //         alertText("拷贝错误：" + err);
+        //     });
+        // }
     </script>
 </head>
 <body>
 <div>
     <input type="file" id="files" onchange="upload();"/>
 </div>
-<div>
-    <button id="copy-button" onclick="copyResult()" disabled>拷贝</button>
-</div>
+<!--<div>-->
+    <!--<button id="copy-button" onclick="copyResult()" disabled>拷贝</button>-->
+<!--</div>-->
 <div id="alert">
+</div>
+<div>
+    <pre id="text"></pre>
 </div>
 </body>
 </html>
