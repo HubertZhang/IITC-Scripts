@@ -8,8 +8,12 @@
 // @downloadURL    https://raw.githubusercontent.com/Hubertzhang/IITC-Scripts/master/UPCV/highlight-visited-captured-portals.user.js
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
+// @include        https://intel.ingress.com/*
+// @include        http://intel.ingress.com/*
 // @match          https://*.ingress.com/intel*
 // @match          http://*.ingress.com/intel*
+// @match          https://intel.ingress.com/*
+// @match          http://intel.ingress.com/*
 // @include        https://*.ingress.com/mission/*
 // @include        http://*.ingress.com/mission/*
 // @match          https://*.ingress.com/mission/*
